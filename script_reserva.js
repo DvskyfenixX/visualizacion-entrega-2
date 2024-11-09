@@ -9,11 +9,10 @@ document.addEventListener("DOMContentLoaded", function() {
             const year = parseInt(movie['Año de estreno']);
             const revenue = parseFloat(movie['Recaudacion mundial (Millones) (USD)']);
             if (!processedData[brand]) {
-                processedData[brand] = { years: [], revenues: [], titles: [], totalRevenue: 0 };
+                processedData[brand] = { years: [], revenues: [], totalRevenue: 0 };
             }
             processedData[brand].years.push(year);
             processedData[brand].revenues.push(revenue);
-            processedData[brand].titles.push(movie.Película);
         });
 
         brands.forEach(brand => {
@@ -29,7 +28,6 @@ document.addEventListener("DOMContentLoaded", function() {
                 y: data.revenues,
                 mode: "markers",
                 name: brand,
-                text: data.titles,
                 marker: {
                     size: data.revenues.map(revenue => revenue / 7),
                     sizemode: "area",
@@ -44,7 +42,6 @@ document.addEventListener("DOMContentLoaded", function() {
                 x: trace.x.filter((_, i) => trace.x[i] <= year),
                 y: trace.y.filter((_, i) => trace.x[i] <= year),
                 marker: { ...trace.marker, size: trace.marker.size.filter((_, i) => trace.x[i] <= year) },
-                text: trace.text.filter((_, i) => trace.x[i] <= year),
                 name: trace.name
             }));
             return { name: year.toString(), data: frameData };
@@ -52,18 +49,18 @@ document.addEventListener("DOMContentLoaded", function() {
 
         const layout = {
             xaxis: {
-                title: { text: "Año de estreno", font: { color: "#ffdd57", size: 18 } },
+                title: { text: "Año de estreno", font: { color: "#ffffff", size: 18 } },
                 gridcolor: "lightgray",
                 color: "#ffffff"
             },
             yaxis: {
-                title: { text: "Recaudación mundial (Millones USD)", font: { color: "#ffdd57", size: 18 } },
+                title: { text: "Recaudación mundial (Millones USD)", font: { color: "#ffffff", size: 18 } },
                 type: "log",
                 gridcolor: "lightgray",
                 color: "#ffffff"
             },
             legend: {
-                font: { color: "#ffdd57" }
+                font: { color: "#ffffff" }
             },
             paper_bgcolor: "rgba(0, 0, 0, 0)",
             plot_bgcolor: "#ffffff",
@@ -76,14 +73,15 @@ document.addEventListener("DOMContentLoaded", function() {
                     args: [null, {
                         mode: "immediate",
                         fromcurrent: true,
-                        frame: { duration: 800, redraw: true },
-                        transition: { duration: 100 }
-                    }]
+                        frame: { duration: 500, redraw: true },
+                        transition: { duration: 200 }
+                    }],
+                    bgcolor: "orange",
                 }]
             }],
             sliders: [{
                 active: 0,
-                y: -0.06,
+                y: -0.25,  // Mueve la línea de tiempo debajo del texto del eje X
                 steps: years.map(year => ({
                     label: year.toString(),
                     method: "animate",
@@ -92,7 +90,7 @@ document.addEventListener("DOMContentLoaded", function() {
             }],
             autosize: true,
             length: 100000,
-            margin: { l: 70, r: 30, t: 20, b: 60 }
+            margin: { l: 70, r: 30, t: 20, b: 80 }
         };
 
         const config = { responsive: true };
